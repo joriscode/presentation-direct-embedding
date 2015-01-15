@@ -120,7 +120,7 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
-\subsection{Motivation \& Goal } % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\subsection{Motivation, Goal \& Features } % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 
 %\begin{frame}
 %\frametitle{Paragraphs of Text}
@@ -134,8 +134,12 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \begin{frame}
 \frametitle{Motivation}
 \begin{itemize}
-\item embedding DSLs, simply!
-\item Slick
+\item Instigated by Slick database library
+\item Embedding DSLs simply!
+\item Provide a painless logic for reification
+\item Direct embedding has avantages:\\
+	- better error messages\\
+	- compile-time\\
 \end{itemize}
 \end{frame}
 
@@ -144,16 +148,110 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \begin{frame}
 \frametitle{Goal}
 \begin{enumerate}
-%\item Soup to \mathit{prototype}
+\item Educational aspect
 \item Implement a core prototype
 \item Make it work
 \item Extend it
+\item Might evolve to a library
 \end{enumerate}
 \end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Features}
+
+\begin{itemize}
+\item Take care of macro
+\item Handle Intermediate Representation (IR)
+\item $\implies$ users code in Scala-like language in Scala projects
+\item $\implies$ users' friendly
+\end{itemize}
+
+\end{frame}
+
 
 %------------------------------------------------
 %------------------------------------------------
 \subsection{Initial constraints}
+
+
+%------------------------------------------------
+%------------------------------------------------
+\subsection{Context}
+
+\begin{frame}
+\frametitle{Big Picture of Slick}
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{./img/bigp.png}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+
+
+\begin{frame}
+\frametitle{Direct vs lifted}
+
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.45\textwidth} % Left column and width
+\textbf{Direct}
+\begin{itemize}
+\item AST generated compile-time 
+\item macro based
+\item Scala type
+\item at runtime, errors for unsupported methods
+\item  experimental on Slick
+\end{itemize}
+
+\column{.5\textwidth} % Right column and width
+\textbf{Lifted}
+\begin{itemize}
+\item changes into a deep DSL IR
+\item operator overloading
+\item deep type
+\item caught at compilation unsupported operators
+\item used by Slick, LMS
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reification: Need to modify Scala AST}
+
+
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Beginning}
+
+How to modify Scala AST?\\
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Beginning}
+
+How to modify Scala AST?\\
+$\rightarrow $ \textbf{quasiquote?}\\
+
+\end{frame}
+
+
+%------------------------------------------------
 
 \begin{frame}
 \frametitle{Beginning}
@@ -166,6 +264,8 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 but ...
 \end{columns}
 \end{frame}
+
+%------------------------------------------------
 
 \begin{frame}
 \frametitle{Beginning}
@@ -180,6 +280,11 @@ $\rightarrow$
 
 \column{.45\textwidth} % Right column and width
 @ANNOTATIONS
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{./img/annot.png}
+\end{figure}
+
 \end{columns}
 \end{frame}
 
@@ -247,7 +352,7 @@ return & \TCR{$X$} \\
 \end{frame}
 
 %------------------------------------------------
-\subsection{Example}
+\subsection{One case example}
 
 \begin{frame}
 \frametitle{An example: embedded code}
@@ -302,21 +407,29 @@ From symbol, arguments, type, we can use the annotation to reify the tree:
 \frametitle{Going further}
 
 \begin{itemize}
-\item ...
+\item Operator
+\item Recursion
+\item Raw block of code
 \end{itemize}
 
 \end{frame}
 
 %------------------------------------------------
-\section{Demo}
+\section{Demonstration}
 \begin{frame}
-\Huge{\centerline{Demo}}
+\Huge{\centerline{Demonstration}}
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
 \Huge{\centerline{Thank you}}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{Special thanks}}
 \end{frame}
 
 %------------------------------------------------

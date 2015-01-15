@@ -1,4 +1,11 @@
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
+\frametitle{Result idea}
 
-This statement requires citation \cite{p1}.
+From symbol, arguments, type, we can use the annotation to reify the tree:
+\begin{block}{Macro}
+ $\implies$ macro q"..."
+\end{block}
+
+\begin{block}{Return}
+ \TCB{table}(name: \TCB{column}[\TCR{String}], price: \TCB{column}[\TCR{Double}])
+\end{block}
+

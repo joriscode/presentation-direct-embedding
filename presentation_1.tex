@@ -81,8 +81,12 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 
+
+%\usepackage{sty/lstlang0}
+%\usepackage{texments}
 \usepackage{listings}
- 
+\usepackage{color}
+
 % "define" Scala
 \lstdefinelanguage{scala}{
   morekeywords={abstract,case,catch,class,def,%
@@ -105,8 +109,7 @@
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
- 
-% Default settings for code listings
+
 \lstset{frame=tb,
   language=scala,
   aboveskip=3mm,
@@ -125,6 +128,8 @@
   tabsize=3
 }
 
+
+ 
 \newcommand{\TCR}{\textcolor{red}}
 \newcommand{\TCG}{\textcolor{green}}
 \newcommand{\TCB}{\textcolor{blue}}
@@ -154,19 +159,11 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \date{\today} % Date, can be changed to a custom date
 
 \begin{document}
+%\lstset{language=Java} 
 
 \begin{frame}
 \titlepage % Print the title page as the first slide
 \end{frame}
-
-\begin{frame}
-\frametitle{Outline} % Table of contents slide, comment this block out to remove it
-\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-\end{frame}
-
-%----------------------------------------------------------------------------------------
-%	PRESENTATION SLIDES
-%----------------------------------------------------------------------------------------
 
 %------------------------------------------------
 \section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
@@ -174,16 +171,44 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 
 \subsection{Motivation, Goal \& Features } % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 
-%\begin{frame}
-%\frametitle{Paragraphs of Text}
-%Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
-%
-%Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
-%\end{frame}
+\begin{frame}[fragile]
+\frametitle{Motivation}
+
+\centerline{As a DSL author...}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[fragile]
+\frametitle{Motivation}
+
+\centerline{would you like to write this kind of code?}
+\begin{lstlisting}
+t.symbol.owner.isType
+&& t.symbol.owner.asType == typeOf[ch.epfl.__.__.type].typeSymbol
+&& x.symbol.name.toString == "query"
+...
+\end{lstlisting}
+
+\centerline{OR}
+\begin{lstlisting}
+case Query ...
+\end{lstlisting}
+
+
+\end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
+\frametitle{Outline} % Table of contents slide, comment this block out to remove it
+\tableofcontents
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[fragile]
 \frametitle{Motivation}
 \begin{itemize}
 \item Instigated by Slick database library
@@ -193,19 +218,24 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 	- better error messages\\
 	- compile-time\\
 \end{itemize}
+
+%\pygment{sh}{
+
+
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Goal}
-\begin{enumerate}
+\begin{itemize}
 \item Educational aspect
 \item Implement a core prototype
-\item Make it work
-\item Extend it
-\item Might evolve to a library
-\end{enumerate}
+\item Make it work \& extend it
+\item Apply on real examples
+\item Might evolve to a complete library
+\end{itemize}
 \end{frame}
 
 
@@ -214,20 +244,15 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \begin{frame}
 \frametitle{Features}
 
+\centerline{Users' friendly}
 \begin{itemize}
-\item Take care of macro
-\item Handle Intermediate Representation (IR)
-\item $\implies$ users code in Scala-like language in Scala projects
-\item $\implies$ users' friendly
+\item Scala-like language in Scala projects
+\item Take care of difficulties (macro)
+\item Provide easy and general tool
+\item Avoid complex and too specific code
 \end{itemize}
 
 \end{frame}
-
-
-%------------------------------------------------
-%------------------------------------------------
-\subsection{Initial constraints}
-
 
 %------------------------------------------------
 %------------------------------------------------
@@ -246,12 +271,8 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 
 
 \begin{frame}
-\frametitle{Direct vs lifted}
+\frametitle{Direct embedding aspects}
 
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-
-\column{.45\textwidth} % Left column and width
-\textbf{Direct}
 \begin{itemize}
 \item AST generated compile-time 
 \item macro based
@@ -260,33 +281,72 @@ Directed by \textbf{Martin Odersky}, Supervised by \textbf{Vojin Jovanovic}\\
 \item  experimental on Slick
 \end{itemize}
 
-\column{.5\textwidth} % Right column and width
-\textbf{Lifted}
-\begin{itemize}
-\item changes into a deep DSL IR
-\item operator overloading
-\item deep type
-\item caught at compilation unsupported operators
-\item used by Slick, LMS
-\end{itemize}
-
-\end{columns}
-
 \end{frame}
 
 %------------------------------------------------
+\section{Implementation}
+%------------------------------------------------
+%------------------------------------------------
+\subsection{Reification}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Reification: Need to modify Scala AST}
 
+$\mathbf{Recall}$: we want to avoid this kind of ugly and specific code
+\begin{lstlisting}
+t.symbol.owner.isType
+&& t.symbol.owner.asType == typeOf[ch.epfl.__.__.type].typeSymbol
+&& x.symbol.name.toString == "query"
+\end{lstlisting}
 
 
 \end{frame}
 
 %------------------------------------------------
 
+
+\begin{frame}[fragile]
+\frametitle{Reification: Need to modify Scala AST}
+
+What do we want, exactly?
+\begin{itemize}
+\item Write simple code, 
+\item without knowledge about the DSL aspects,
+\item but that is for DSL
+\end{itemize}
+
+Let us write it and let someone else take care of details
+
+
+\end{frame}
+
+%------------------------------------------------
+
+
+\begin{frame}[fragile]
+\frametitle{Reification: Need to modify Scala AST}
+
+Let us thinking on an example:
+\begin{lstlisting}
+ def query[T](q:QueryableValue[T]) = ...
+ val coffees = Queryable[Coffee]
+ \end{lstlisting}
+ 
+But here \TCR{Coffee} refers to a SQL table...\\
+We need to specify it without knowledge about the domain and without huge overhead\\
+Intermediate Representation (IR):\\
+
+\begin{lstlisting}
+ case class Coffee(...) // where Coffee will refer to SQL table
+\end{lstlisting}
+ Later on we will examine the IR and transform the corresponding AST
+
+\end{frame}
+
+%------------------------------------------------
+
 \begin{frame}
-\frametitle{Beginning}
+\frametitle{Beginning with AST}
 
 How to modify Scala AST?\\
 
@@ -295,7 +355,7 @@ How to modify Scala AST?\\
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Beginning}
+\frametitle{Quasiquote}
 
 How to modify Scala AST?\\
 $\rightarrow $ \textbf{quasiquote?}\\
@@ -306,12 +366,12 @@ $\rightarrow $ \textbf{quasiquote?}\\
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Beginning}
+\frametitle{No quasiquote}
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
 \column{.45\textwidth} % Left column and width
 \textbf{No quasiquote}
-
+because of AST output is not fixe
 \column{.5\textwidth} % Right column and width
 but ...
 \end{columns}
@@ -320,7 +380,7 @@ but ...
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Beginning}
+\frametitle{Symbols}
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
 \column{.30\textwidth} % Left column and width
@@ -338,30 +398,80 @@ $\rightarrow$
 
 %------------------------------------------------
 
+\begin{frame}[fragile]
+\frametitle{Annotation}
+
+\begin{lstlisting}
+@table("COFFEES") // the annotation
+case class Coffee(    // the IR
+...
+)
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Simple cases prototype}
+
+%------------------------------------------------
+
 \begin{frame}
-\frametitle{Beginning}
-
-\centerline{ \TCR{@ANNOTATIONS}}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-\column{.50\textwidth} % Left column and width
-
+\frametitle{Overview}
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{./img/annot.png}
+\includegraphics[width=0.8\linewidth]{./img/flow.jpg}
 \end{figure}
-
-\column{.50\textwidth} % Left column and width
-
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{./img/annotSlick.png}
-\end{figure}
-
-\end{columns}
 \end{frame}
 
 %------------------------------------------------
-\section{Implementation}
+
+\begin{frame}[fragile]
+\frametitle{Macro}
+
+\begin{lstlisting}
+@table("COFFEES")
+case class Coffee(
+    @column("COF_NAME")
+    name: String,
+    @column("PRICE")
+    price: Double
+)
+\end{lstlisting}
+
+\begin{block}{Tree}
+ Apply(Select(New(Ident(ch.epfl.directembedding.test.ClassExample)), termNames.CONSTRUCTOR), List())
+\end{block}
+
+\end{frame}
+
 %------------------------------------------------
-\subsection{Simple cases prototype}
+
+\begin{frame}[fragile]
+\frametitle{Result idea}
+
+From symbol, arguments, type, we can use the annotation to reify the tree:
+\begin{block}{Macro}
+ $\implies$ macro q"..." 
+\end{block}
+
+\begin{block}{Return}
+ \TCB{table}(name: \TCB{column}[\TCR{String}], price: \TCB{column}[\TCR{Double}])
+\end{block}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Summary of the example}
+
+\begin{itemize}
+\item Users accordingly annotate DSLs expressions
+\item ASTs generated and transformed via macro
+\item After the modification, the tree contains the DSL representation .i.e. the annotation
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
 
 \begin{frame}
 \frametitle{Objects}
@@ -406,98 +516,7 @@ return & \TCR{$X$} \\
 
 %------------------------------------------------
 
-\begin{frame}
-\frametitle{Overview}
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{./img/flow.jpg}
-\end{figure}
-\end{frame}
-
 %------------------------------------------------
-\subsection{One case example}
-
-\begin{frame}
-\frametitle{An example: embedded code}
-\begin{block}{Annotate}
-@reifyAs(\TCM{\textbf{J}ustArgs})\\
-\TCR{def} \TCB{justArgs}(x: Int): Int = ???
-\end{block}
-
-\begin{block}{Lift}
-lift \{\\
-~ ObjectExample.\TCB{justArgs}(1)\\
-\}
-\end{block}
-
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{An example: tree}
-\begin{block}{Tree}
-ObjectExample.\TCB{justArgs}(1)\\
-~ \textit{annotated}\\
-directembedding.reifyAs(\TCM{\textbf{J}ustArgs})\\
-\end{block}
-
-\begin{block}{Raw tree}
-Apply(Select(Ident(ch.epfl.directembedding.test.ObjectExample), TermName("justArgs")), List(Literal(Constant(1))))
-\end{block}
-
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{An example: macro}
-
-From symbol, arguments, type, we can use the annotation to reify the tree:
-\begin{block}{Macro}
- $\implies$ macro q"..."
-\end{block}
-
-\begin{block}{Returns}
-\TCR{\textbf{J}}ustArgs.apply(1)
-\end{block}
-
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{An example: Summary}
-
-\begin{itemize}
-\item Users accordingly annotate DSLs expressions
-\item ASTs generated and transformed via macro
-\item After the modification, the tree contains the DSL representation .i.e. the annotation
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Comparison}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-\column{.40\textwidth} % Left column and width
-Direct
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{./img/annotSlick.png}
-\end{figure}
-
-\column{.60\textwidth} % Left column and width
-Lifted
-\begin{figure}
-\includegraphics[width=1.0\linewidth]{./img/lift.png}
-\end{figure}
-
-\end{columns}
-\end{frame}
-
-%------------------------------------------------
-
 
 \begin{frame}
 \frametitle{Going further}

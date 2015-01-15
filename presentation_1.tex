@@ -81,6 +81,58 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 
+\usepackage{listings}
+ 
+% "define" Scala
+\lstdefinelanguage{scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+ 
+% Default settings for code listings
+\lstset{frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+\newcommand{\TCR}{\textcolor{red}}
+\newcommand{\TCG}{\textcolor{green}}
+\newcommand{\TCB}{\textcolor{blue}}
+\newcommand{\TCM}{\textcolor{brown}}
+\definecolor{applegreen}{rgb}{0.10, 0.40, 0.20}
+\newcommand{\TCAG}{\textcolor{applegreen}}
+
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -279,10 +331,28 @@ we can access to the symbols
 $\rightarrow$
 
 \column{.45\textwidth} % Right column and width
-@ANNOTATIONS
+~ \TCR{@ANNOTATIONS}
+
+\end{columns}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Beginning}
+
+\centerline{ \TCR{@ANNOTATIONS}}
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+\column{.50\textwidth} % Left column and width
 
 \begin{figure}
 \includegraphics[width=0.8\linewidth]{./img/annot.png}
+\end{figure}
+
+\column{.50\textwidth} % Left column and width
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{./img/annotSlick.png}
 \end{figure}
 
 \end{columns}
@@ -292,14 +362,6 @@ $\rightarrow$
 \section{Implementation}
 %------------------------------------------------
 \subsection{Simple cases prototype}
-
-\newcommand{\TCR}{\textcolor{red}}
-\newcommand{\TCG}{\textcolor{green}}
-\newcommand{\TCB}{\textcolor{blue}}
-\newcommand{\TCM}{\textcolor{brown}}
-\definecolor{applegreen}{rgb}{0.10, 0.40, 0.20}
-\newcommand{\TCAG}{\textcolor{applegreen}}
-
 
 \begin{frame}
 \frametitle{Objects}
@@ -402,6 +464,40 @@ From symbol, arguments, type, we can use the annotation to reify the tree:
 \end{frame}
 
 %------------------------------------------------
+
+\begin{frame}
+\frametitle{An example: Summary}
+
+\begin{itemize}
+\item Users accordingly annotate DSLs expressions
+\item ASTs generated and transformed via macro
+\item After the modification, the tree contains the DSL representation .i.e. the annotation
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Comparison}
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+\column{.40\textwidth} % Left column and width
+Direct
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{./img/annotSlick.png}
+\end{figure}
+
+\column{.60\textwidth} % Left column and width
+Lifted
+\begin{figure}
+\includegraphics[width=1.0\linewidth]{./img/lift.png}
+\end{figure}
+
+\end{columns}
+\end{frame}
+
+%------------------------------------------------
+
 
 \begin{frame}
 \frametitle{Going further}
